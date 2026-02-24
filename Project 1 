@@ -1,0 +1,46 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = sns.load_dataset("tips")
+
+print("original dataset shape:")
+print(df.shape)
+
+print("first 5 rows:")
+print(df.head())
+
+print("missing values:")
+print(df.isnull().sum())
+
+print("number of duplicate rows:")
+print(df.duplicated().sum())
+
+df = df.dropna()
+
+df = df.drop_duplicates()
+
+df["tip_percentage"] = (df["tip"] / df["total_bill"]) * 100
+
+df = df[df["tip_percentage"] > 0]
+df = df[df["tip_percentage"] < 50]
+
+df["time"] = df["time"].astype("category")
+
+print("after cleaning shape:")
+print(df.shape)
+
+print("cleaned first 5 rows:")
+print(df.head())
+
+print("summary statistics:")
+print(df.describe())
+
+print("tip percentage column:")
+print(df["tip_percentage"].head())
+
+sns.scatterplot(x="total_bill", y="tip", data=df)
+plt.title("Total bill vs tip amount")
+plt.xlabel("Total bill")
+plt.ylabel("Tip")
+plt.show()
