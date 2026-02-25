@@ -1,0 +1,73 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt#displays graphs
+# import pandas/seaborn library for data cleaning and analysis
+df = sns.load_dataset("tips")
+# load the tips dataset into a dataframe called df
+print("original dataset shape:")
+print(df.shape)
+# print label to show original size of dataset
+ # show number of rows and columns before cleaning
+
+print("first 5 rows:")
+print(df.head())
+#print label/display
+print("missing values:")
+print(df.isnull().sum())
+ # print label
+ # count missing values in each column
+
+print("number of duplicate rows:")
+print(df.duplicated().sum())
+# print label
+# check how many duplicate rows exist
+
+df = df.dropna()
+df = df.drop_duplicates()
+# remove any rows with missing values
+# remove duplicate rows from dataset
+
+df["tip_percentage"] = (df["tip"] / df["total_bill"]) * 100
+# create a new column that calculates tip as a percentage of the total bill
+df = df[df["tip_percentage"] > 0]
+df = df[df["tip_percentage"] < 50]
+# remove rows with negative or zero tip percentage
+# remove rows with unusually high tip percentages (greater than 50%)
+
+df["time"] = df["time"].astype("category")
+# convert the time column into a categorical data type
+
+print("after cleaning shape:")
+print(df.shape)
+# print label
+# show number of rows and columns after cleaning
+
+print("cleaned first 5 rows:")
+print(df.head())
+# print label
+ # display first 5 rows after cleaning
+
+print("summary statistics:")
+print(df.describe())
+# print label
+# show statistical summary of numerical columns
+
+print("tip percentage column:")
+print(df["tip_percentage"].head())
+# print label
+# show first 5 values of new column
+
+sns.scatterplot(x="total_bill", y="tip", data=df)
+# create scatterplot to show relationship between total bill and tip
+
+plt.title("Total bill vs tip amount")
+# add title to graph
+
+plt.xlabel("Total bill")
+# label x-axis
+plt.ylabel("Tip")
+# label y-axis
+plt.show()
+# display the graph
+corr = df.corr(numeric_only=True)
+
