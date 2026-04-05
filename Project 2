@@ -1,0 +1,84 @@
+import os, pandas as pd, matplotlib.pyplot as plt
+# import libraries: os (folders), pandas (data), matplotlib (charts)
+
+from sklearn.datasets import load_breast_cancer
+# load built-in breast cancer dataset
+
+from sklearn.model_selection import train_test_split
+# used to split data into training and testing sets
+
+from sklearn.linear_model import LogisticRegression
+# machine learning model 1
+
+from sklearn.tree import DecisionTreeClassifier
+# machine learning model 2
+
+from sklearn.ensemble import RandomForestClassifier
+# machine learning model 3
+
+from sklearn.metrics import accuracy_score
+# function to measure how accurate the model is
+
+os.makedirs("outputs", exist_ok=True)
+# create a folder called "outputs" if it does not already exist
+
+# Load data
+data = load_breast_cancer(as_frame=True)
+# load dataset as a pandas DataFrame
+
+X, y = data.data, data.target
+# X = features (inputs), y = target (benign or malignant)
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# split data into 80% training and 20% testing
+
+# Models
+models = {
+    "Logistic": LogisticRegression(max_iter=5000),
+    # Logistic Regression model
+
+    "Tree": DecisionTreeClassifier(),
+    # Decision Tree model
+
+    "Forest": RandomForestClassifier()
+    # Random Forest model
+}
+
+results = {}
+# empty dictionary to store model results
+
+# Train & evaluate
+for name, m in models.items():
+    # loop through each model
+
+    m.fit(X_train, y_train)
+    # train the model using training data
+
+    preds = m.predict(X_test)
+    # make predictions on test data
+
+    results[name] = accuracy_score(y_test, preds)
+    # calculate accuracy and store it
+
+# Save results
+df = pd.DataFrame(list(results.items()), columns=["Model","Accuracy"])
+# convert results dictionary into a table (DataFrame)
+
+df.to_csv("outputs/results.csv", index=False)
+# save results as a CSV file
+
+# Plot
+plt.bar(df["Model"], df["Accuracy"])
+# create a bar chart comparing model accuracy
+
+plt.title("Model Accuracy")
+# add title to chart
+
+plt.savefig("outputs/chart.png")
+# save the chart as an image file
+
+print(df)
+# print the results table to the terminal
+
+#feature significance
