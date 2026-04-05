@@ -27,21 +27,21 @@ data = load_breast_cancer(as_frame=True)
 # load dataset as a pandas DataFrame
 
 X, y = data.data, data.target
-# X = features (inputs), y = target (benign or malignant)
+# X = features (inputs), y = target (0 = malignant, 1 = benign)
 
 # Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 # split data into 80% training and 20% testing
 
 # Models
 models = {
-    "Logistic": LogisticRegression(max_iter=5000),
+    "Logistic": LogisticRegression(max_iter=5000, random_state=42),
     # Logistic Regression model
 
-    "Tree": DecisionTreeClassifier(),
+    "Tree": DecisionTreeClassifier(random_state=42),
     # Decision Tree model
 
-    "Forest": RandomForestClassifier()
+    "Forest": RandomForestClassifier(random_state=42)
     # Random Forest model
 }
 
@@ -81,4 +81,4 @@ plt.savefig("outputs/chart.png")
 print(df)
 # print the results table to the terminal
 
-#feature significance
+# feature importance not implemented
